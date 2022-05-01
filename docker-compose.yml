@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  database:
+    image: postgres
+    restart: always
+    hostname: rosstrello-database
+    env_file:
+      - db/vars_db.env
+    ports:
+      - "5431:5432"
+    networks:
+      - "default"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
