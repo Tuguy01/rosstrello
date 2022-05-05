@@ -1,2 +1,5 @@
-package ru.nsu.kanbanboard.kanbanbackend.repositories;public class BoardRepository {
+package ru.nsu.kanbanboard.kanbanbackend.repositories;
+
+public class BoardRepository {
+
 }
