@@ -19,7 +19,7 @@ public class CardEntity {
     private String description;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "column_id")
     private ColumnEntity column;
 

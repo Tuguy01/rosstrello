@@ -15,28 +15,28 @@ Create table User_Roles (
 );
 
 Create table User_Works_With_Board (
-	user_id int references Users(id),
-	board_id int references Boards(id),
-	role_id int references User_Roles(id)
+	user_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	board_id int references Boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	role_id int references User_Roles(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create table Board_Columns (
 	id Serial primary key,
 	name text NOT NULL,
-	board_id int references Boards(id)
+	board_id int references Boards(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create table Board_Cards (
 	id Serial primary key,
 	name text NOT NULL,
 	description text,
-	creator_id int references Users(id),
-	column_id int references Board_Columns(id)
+	creator_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	column_id int references Board_Columns(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create table User_Works_With_Card (
-	card_id int references Board_Cards(id),
-	user_id int references Users(id)
+	card_id int references Board_Cards(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	user_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 insert into Users(email, name) values('ivanov@example.com', 'Ivan Ivanov');
