@@ -14,8 +14,12 @@ public class ColumnController {
     ColumnService columnService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createColumn(@RequestParam int boardID, @RequestBody ColumnEntity column) {
-        columnService.createNewColumn(boardID, column);
+    public ResponseEntity<ColumnEntity>  createColumn(@RequestParam int boardID, @RequestBody ColumnEntity column) {
+        var newColumn = columnService.createNewColumn(boardID, column);
+        if (newColumn != null) {
+            return ResponseEntity.ok(newColumn);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

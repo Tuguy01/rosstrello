@@ -14,9 +14,14 @@ public class ColumnRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void insertColumnIntoBoard(int boardID, ColumnEntity column) {
-        column.setBoard(entityManager.find(BoardEntity.class, boardID));
+    public ColumnEntity insertColumnIntoBoard(int boardID, ColumnEntity column) {
+        var board = entityManager.find(BoardEntity.class, boardID);
+        if (board == null) {
+            return null;
+        }
+        column.setBoard(board);
         entityManager.persist(column);
+        return column;
     }
 
     public ColumnEntity updateColumn(ColumnEntity column) {

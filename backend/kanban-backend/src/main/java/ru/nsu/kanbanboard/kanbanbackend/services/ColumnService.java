@@ -10,7 +10,7 @@ public class ColumnService {
     @Autowired
     ColumnRepository columnRepository;
 
-    public void createNewColumn(int boardID, ColumnEntity column) {columnRepository.insertColumnIntoBoard(boardID, column);}
+    public ColumnEntity createNewColumn(int boardID, ColumnEntity column) {return columnRepository.insertColumnIntoBoard(boardID, column);}
 
     public ColumnEntity updateColumn(ColumnEntity column) {
         if (column.getId() != null) {
