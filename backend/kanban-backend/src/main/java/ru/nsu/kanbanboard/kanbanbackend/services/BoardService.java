@@ -15,16 +15,7 @@ public class BoardService {
         return boardRepository.getById(id);
     }
 
-    public void createNewColumn(int boardID, ColumnEntity column) {boardRepository.insertColumnIntoBoard(boardID, column);}
 
-    public ColumnEntity updateColumn(ColumnEntity column) {
-        if (column.getId() != null) {
-            boardRepository.updateColumn(column);
-        }
-        return null;
-    }
 
-    public ColumnEntity deleteColumn(int columnID) {
-        return boardRepository.deleteColumn(columnID);
-    }
+
 }

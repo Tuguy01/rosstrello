@@ -24,26 +24,5 @@ public class BoardRepository {
         return entityManager.find(BoardEntity.class, id);
     }
 
-    public void insertColumnIntoBoard(int boardID, ColumnEntity column) {
-        column.setBoard(getById(boardID));
-        entityManager.persist(column);
-    }
 
-    public ColumnEntity updateColumn(ColumnEntity column) {
-
-        var columnInDB = entityManager.find(ColumnEntity.class, column.getId());
-        if (columnInDB != null) {
-            columnInDB.setName(column.getName());
-            entityManager.merge(columnInDB);
-        }
-        return columnInDB;
-    }
-
-    public ColumnEntity deleteColumn(int columnID) {
-        var column = entityManager.find(ColumnEntity.class, columnID);
-        if (column != null) {
-            entityManager.remove(column);
-        }
-        return column;
-    }
 }
