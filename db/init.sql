@@ -1,5 +1,6 @@
 Create table Users (
 	id Serial primary key,
+	email varchar(256) NOT NULL,
 	name varchar(256) NOT NULL
 );
 
@@ -8,52 +9,52 @@ Create table Boards (
 	name varchar(256) NOT NULL
 );
 
-Create table UserRoles (
+Create table User_Roles (
 	id Serial primary key,
 	name varchar(256) NOT NULL
 );
 
-Create table UserWorksWithBoard (
-	userId int references Users(id),
-	boardId int references Boards(id),
-	roleId int references UserRoles(id)
+Create table User_Works_With_Board (
+	user_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	board_id int references Boards(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	role_id int references User_Roles(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-Create table BoardColumns (
+Create table Board_Columns (
 	id Serial primary key,
 	name text NOT NULL,
-	boardId int references Boards(id)
+	board_id int references Boards(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-Create table BoardCards (
+Create table Board_Cards (
 	id Serial primary key,
 	name text NOT NULL,
 	description text,
-	creatorId int references Users(id),
-	columnId int references BoardColumns(id)
+	creator_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	column_id int references Board_Columns(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-Create table UserWorksWithCard (
-	cardId int references BoardCards(id),
-	userId int references Users(id)
+Create table User_Works_With_Card (
+	card_id int references Board_Cards(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	user_id int references Users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-insert into Users(name) values('Ivan Ivanov');
+insert into Users(email, name) values('ivanov@example.com', 'Ivan Ivanov');
 
 insert into Boards(name) values('Ivanov board');
 
-insert into UserRoles(name) values('Creator');
+insert into User_Roles(name) values('Creator');
 
-insert into UserWorksWithBoard(userId, boardId, roleId) values (1,1,1);
+insert into User_Works_With_Board(user_id, board_id, role_id) values (1,1,1);
 
-insert into BoardColumns(name, boardId) values ('To do', 1);
-insert into BoardColumns(name, boardId) values ('In progress', 1);
-insert into BoardColumns(name, boardId) values ('Done', 1);
+insert into Board_Columns(name, board_id) values ('To do', 1);
+insert into Board_Columns(name, board_id) values ('In progress', 1);
+insert into Board_Columns(name, board_id) values ('Done', 1);
 
-insert into BoardCards(name, description, creatorId, columnId) values ('Покормить кота', 'Необходимо покормить кота', 1, 1);
-insert into BoardCards(name, description, creatorId, columnId) values ('Покормить собаку', NULL, 1, 1);
-insert into BoardCards(name, description, creatorId, columnId) values ('Выбросить мусор', NULL, 1, 3);
+insert into Board_Cards(name, description, creator_id, column_id) values ('Покормить кота', 'Необходимо покормить кота', 1, 1);
+insert into Board_Cards(name, description, creator_id, column_id) values ('Покормить собаку', NULL, 1, 1);
+insert into Board_Cards(name, description, creator_id, column_id) values ('Выбросить мусор', NULL, 1, 3);
 
-insert into UserWorksWithCard(cardId, userId) values(1,1);
-insert into UserWorksWithCard(cardId, userId) values(2,1);
-insert into UserWorksWithCard(cardId, userId) values(3,1);
+insert into User_Works_With_Card(card_id, user_id) values(1,1);
+insert into User_Works_With_Card(card_id, user_id) values(2,1);
+insert into User_Works_With_Card(card_id, user_id) values(3,1);
