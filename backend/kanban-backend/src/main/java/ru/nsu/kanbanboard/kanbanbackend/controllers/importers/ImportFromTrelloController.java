@@ -21,7 +21,6 @@ public class ImportFromTrelloController {
     @GetMapping
     public ResponseEntity<BoardEntity> importBoardFromTrello(@RequestParam String boardID, @RequestParam String key, @RequestParam String token) {
         var board = service.importBoardFromTrello(boardID, key, token);
-        Integer id = board.getId();
         return ResponseEntity.ok(board);
     }
 }
