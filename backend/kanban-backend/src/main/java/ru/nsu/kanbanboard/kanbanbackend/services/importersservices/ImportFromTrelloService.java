@@ -1,6 +1,5 @@
 package ru.nsu.kanbanboard.kanbanbackend.services.importersservices;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ public class ImportFromTrelloService {
     @Autowired
     private CardsRepository cardsRepository;
 
-    //private String formatURLStringForGettingLists = "https://api.trello.com/1/boards/%s/lists?key=%s&token=%s"
     public BoardEntity importBoardFromTrello(String boardID, String key, String token) {
         var board = getTrelloBoardById(boardID, key, token);
         var lists = getListsOfBoard(boardID, key, token);
@@ -48,7 +46,6 @@ public class ImportFromTrelloService {
 
     @SneakyThrows
     private List<TrelloListDTO> getListsOfBoard(String boardID, String key, String token) {
-        //String URLString = formatURLStringForGettingLists.format()
         String URLString = "https://api.trello.com/1/boards/" + boardID +"/lists?key=" + key + "&token=" + token;
         URI uri = URI.create(URLString);
         var lists = HttpUtils.doAndParseGETRequest(uri, TrelloListDTO[].class).thenApply(array -> Arrays.asList(array)).get();
