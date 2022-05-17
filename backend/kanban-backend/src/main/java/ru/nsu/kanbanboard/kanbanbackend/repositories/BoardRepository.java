@@ -24,5 +24,8 @@ public class BoardRepository {
         return entityManager.find(BoardEntity.class, id);
     }
 
-
+    public BoardEntity createNewBoard(BoardEntity entity) {
+        entityManager.persist(entity);
+        return entity;
+    }
 }
