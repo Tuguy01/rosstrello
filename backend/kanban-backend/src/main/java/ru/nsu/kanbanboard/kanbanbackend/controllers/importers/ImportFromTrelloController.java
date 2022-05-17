@@ -1,7 +1,6 @@
 package ru.nsu.kanbanboard.kanbanbackend.controllers.importers;
 
 
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +16,7 @@ import ru.nsu.kanbanboard.kanbanbackend.services.importersservices.ImportFromTre
 public class ImportFromTrelloController {
     @Autowired
     ImportFromTrelloService service;
-    @Autowired
-    BoardService boardService;
+
 
     @GetMapping
     public ResponseEntity<BoardEntity> importBoardFromTrello(@RequestParam String boardID, @RequestParam String key, @RequestParam String token) {

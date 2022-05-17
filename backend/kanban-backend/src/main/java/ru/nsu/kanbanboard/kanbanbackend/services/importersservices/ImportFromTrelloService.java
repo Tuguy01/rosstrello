@@ -57,7 +57,6 @@ public class ImportFromTrelloService {
 
     @SneakyThrows
     private List<TrelloCardDTO> getCardsOfBoard(String boardID, String key, String token) {
-        //String URLString = formatURLStringForGettingLists.format()
         String URLString = "https://api.trello.com/1/boards/" + boardID +"/cards?key=" + key + "&token=" + token;
         URI uri = URI.create(URLString);
         var cards = HttpUtils.doAndParseGETRequest(uri, TrelloCardDTO[].class).thenApply(array -> Arrays.asList(array)).get();
@@ -91,10 +90,8 @@ public class ImportFromTrelloService {
             var newCard = new CardEntity();
             newCard.setName(cards.get(i).getName());
             newCard.setDescription(cards.get(i).getDesc());
-           // newCard.setColumn(columns.get(cardIdToColumnIdMap.get(i)));
             cardsRepository.insertCardIntoColumn(columns.get(cardIdToColumnIdMap.get(i)).getId(), newCard);
         }
-        //newBoard.setColumns(columns);
         boardRepository.refresh(newBoard);
         return newBoard;
     }
