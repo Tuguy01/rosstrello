@@ -28,4 +28,7 @@ public class BoardRepository {
         entityManager.persist(entity);
         return entity;
     }
+    public void refresh(BoardEntity entity) {
+        entityManager.refresh(entity);
+    }
 }

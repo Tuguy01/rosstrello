@@ -95,7 +95,8 @@ public class ImportFromTrelloService {
             cardsRepository.insertCardIntoColumn(columns.get(cardIdToColumnIdMap.get(i)).getId(), newCard);
         }
         //newBoard.setColumns(columns);
-        return boardRepository.getById(newBoard.getId());
+        boardRepository.refresh(newBoard);
+        return newBoard;
     }
 
 }
