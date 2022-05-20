@@ -114,6 +114,7 @@ function App() {
                                                       >
                                                           {item.content}
                                                       </div>
+
                                                   );
                                               }}
                                           </Draggable>
@@ -125,12 +126,50 @@ function App() {
                       }}
                   </Droppable>
                       </div>
+                      <button href="#contained-buttons"
+                         // onClick={onClick}
+                          style={{
+                              padding: 16,
+                              margin: '0 0 8px 0',
+                              minHeight: '50px',
+                              backgroundColor: 'lightgray',
+                              color: 'white',
+                              width: 250
+                          }}
+                      >
+                        Add
+                      </button>
                   </div>
+
               )
           })}
+
       </DragDropContext>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h2> Add</h2>
+            <div style={{margin: 8}}>
+        <button
+
+                style={{
+                    padding: 4,
+                    margin: '0 0 8px 0',
+                    backgroundColor: 'lightgray',
+                    color: 'white',
+                    width: 50,
+                    minHeight: 500
+                }}
+        >
+            Add
+        </button>
+            </div>
+        </div>
     </div>
+
   );
 }
 
+
+
 export default App;
+
+
