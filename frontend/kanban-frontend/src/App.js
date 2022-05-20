@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 
 const itemsFromBackend = [
-    {id: 'one', content: 'First task'},
-    {id: 'two', content: 'Second task'},
-    {id: 'tree', content: 'Third task'},
-    {id: 'four', content: "Fourth task"}
+    {id: '1', content: 'First task'},
+    {id: '2', content: 'Second task'},
+    {id: '3', content: 'Third task'},
+    {id: '4', content: "Fourth task"}
 ]
 
 const columnsFromBackend =
