@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-//import uuid from "uuid/v4";
-import { v4 as uuid} from "uuid";
+
 const itemsFromBackend = [
-    {id: uuid(), content: 'First task'},
-    {id: uuid(), content: 'Second task'},
-    {id: uuid(), content: 'Third task'},
-    {id: uuid(), content: "Fourth task"}
+    {id: '1', content: 'First task'},
+    {id: '2', content: 'Second task'},
+    {id: '3', content: 'Third task'},
+    {id: '4', content: "Fourth task"}
 ]
 
 const columnsFromBackend =
     {
-        [uuid()]: {
+        [1]: {
             name: 'Requested',
             items: itemsFromBackend
         },
-        [uuid()]: {
+        [2]: {
             name: 'To do',
             items: []
         },
-        [uuid()]: {
+        [3]: {
             name: 'In progress',
             items: []
         },
-        [uuid()]: {
+        [4]: {
             name: 'Under review',
             items:[]
         }
     };
+
 const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
     const {source, destination} = result;
@@ -66,9 +66,13 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
     const [columns, setColumns] = useState(columnsFromBackend);
-  return (
+  return (<div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 100, background: 'lightgray'}}>
+              <h1>Name board</h1>
+          </div>
     <div style={{display: 'flex', justifyContent: 'center', height: '100%'}}>
       <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
+
           {Object.entries(columns).map(([id, column]) =>{
               return(
                   <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -127,7 +131,7 @@ function App() {
                   </Droppable>
                       </div>
                       <button href="#contained-buttons"
-                         // onClick={onClick}
+
                           style={{
                               padding: 16,
                               margin: '0 0 8px 0',
@@ -164,7 +168,7 @@ function App() {
             </div>
         </div>
     </div>
-
+      </div>
   );
 }
 
