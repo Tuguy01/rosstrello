@@ -31,14 +31,16 @@ public class UserEntity implements UserDetails {
     )
     private Long id;
     private String email;
-    private String username;
+    private String name;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRoleEntity userRole;
+    private Boolean locked = false;
+    private Boolean enabled = true;
 
-    public UserEntity(String email, String username, String password, UserRoleEntity userRole){
+    public UserEntity(String email, String name, String password, UserRoleEntity userRole){
         this.email = email;
-        this.username = username;
+        this.name = name;
         this.password = password;
         this.userRole = userRole;
     }
@@ -56,7 +58,11 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return name;
+    }
+
+    public String getEmail(){
+        return email;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return !locked;
     }
 
     @Override
@@ -76,6 +82,6 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
