@@ -19,10 +19,12 @@ public class UserBoardController {
     @Autowired
     BoardService boardService;
     @GetMapping
-    @ResponseStatus
-    public BoardEntity getBoardById(@PathVariable int boardID) {
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID) {
         var entity = boardService.getBoardById(boardID);
-        return entity;
+        if (entity == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(entity);
     }
 
 
