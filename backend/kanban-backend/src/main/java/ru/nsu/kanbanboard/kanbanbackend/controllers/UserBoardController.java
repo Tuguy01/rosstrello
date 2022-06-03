@@ -23,10 +23,9 @@ public class UserBoardController {
     @Autowired
     BoardService boardService;
     @GetMapping
-    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID, String token) {
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID, @PathVariable String token) {
 
         var entity = boardService.getBoardById(boardID);
-        System.out.println(boardID);
         if (entity == null) {
             return ResponseEntity.badRequest().build();
         }
