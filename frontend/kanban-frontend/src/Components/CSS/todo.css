@@ -1,0 +1,87 @@
+body{
+  background-color: #f5f0e8;
+  
+}
+h1{
+  font-size: 38px;
+  font-family: Courier New,monospace, serif;
+  box-shadow: 10px 5px 5px black;
+}
+
+input[type=text] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+
+: border-box;
+  border: 1px dashed black;
+  border-radius: 15px;
+  background-color: rgb(255, 249, 249);
+  color: rgb(10, 10, 10);
+  font-family: Courier New,monospace, sans-serif;
+}
+
+input[type=password] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px dashed black;
+  border-radius: 15px;
+  background-color: rgb(255, 249, 249);
+  color: rgb(10, 10, 10);
+  font-family:Courier New, monospace, sans-serif;
+}
+
+input[type=submit] {
+  background-color: #0e0a0a;
+  border: none;
+  color: #f8f8f8;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  box-shadow: 10px 5px 5px #504f4f;
+  /* cursor: pointer; */
+  border-radius: 16px;
+  font-family: Courier New, monospace, sans-serif;
+  margin-left: 22px;
+}
+
+select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(10, 10, 10);
+  font-family:Courier New, monospace, sans-serif;
+}
+
+
+.container{
+  background-color: antiquewhite;
+  border-style: hidden;
+  border-radius: 15px;
+  padding:18px;
+  text-align: center;
+  box-shadow: 0 8px 6px -6px #0a0808;
+  
+ 
+  
+}
+@media screen and (max-width:900px){
+
+    .main-contianer{
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: space-evenly; 
+      
+    }
+  
+  }
+

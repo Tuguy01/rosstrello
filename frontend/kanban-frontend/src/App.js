@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import Form from "./Components/Form";
 
 const itemsFromBackend = [
     {id: '1', content: 'First task'},
@@ -66,7 +67,8 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
     const [columns, setColumns] = useState(columnsFromBackend);
-  return (<div>
+  return (
+      <div>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 100, background: 'lightgray'}}>
               <h1>Name board</h1>
           </div>
@@ -129,6 +131,7 @@ function App() {
                           )
                       }}
                   </Droppable>
+
                       </div>
                       <button href="#contained-buttons"
 
