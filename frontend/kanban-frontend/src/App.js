@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 
 const itemsFromBackend = [
@@ -66,6 +66,24 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
     const [columns, setColumns] = useState(columnsFromBackend);
+    const token = "4332cc86-c291-4446-a025-db24bb9caa2b"
+    useEffect(() => {
+        fetch("http://localhost:8081/api/v1/boards/board/1/" + token)
+            .then(res => res.json()).then(res => {
+                const col = res['columns'];
+                var new_col = {};
+                for (const i in col) {
+                    var items = [];
+                    const cards = col[i]["cards"];
+                    for (const j in cards) {
+                        items.push({id: String(Number(j)+1), content: cards[j]["name"]});
+                    }
+                    const arr = [Number(i) + 1];
+                    new_col[arr] = ({name:col[i]["name"], items:items});
+                }
+                setColumns(new_col);
+        }).catch(e => console.log(e))
+    }, [])
   return (<div>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 100, background: 'lightgray'}}>
               <h1>Name board</h1>
