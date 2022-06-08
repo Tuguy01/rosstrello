@@ -38,5 +38,13 @@ public class BoardRepository {
         return board;
     }
 
+    public BoardEntity deleteBoard(int boardID){
+        var board = entityManager.find(BoardEntity.class, boardID);
+        if (board != null){
+            entityManager.remove(board);
+        }
+        return board;
+    }
+
 
 }

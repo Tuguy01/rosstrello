@@ -22,4 +22,8 @@ public class BoardService {
         return boardRepository.newBoardCreate(name, board, confirmationToken);
     }
 
+    public BoardEntity deleteBoard(int boardID){
+        return  boardRepository.deleteBoard(boardID);
+    }
+
 }

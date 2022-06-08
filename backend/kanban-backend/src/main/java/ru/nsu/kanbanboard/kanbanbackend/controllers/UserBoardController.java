@@ -62,5 +62,14 @@ public class UserBoardController {
         return ResponseEntity.badRequest().build();
     }
 
+    @DeleteMapping(path = "/api/v1/boards/")
+    public ResponseEntity<BoardEntity> deleteBoard(@RequestParam int boardID){
+        var deletedBoard = boardService.deleteBoard(boardID);
+        if (deletedBoard != null){
+            return ResponseEntity.ok(deletedBoard);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 
 }
