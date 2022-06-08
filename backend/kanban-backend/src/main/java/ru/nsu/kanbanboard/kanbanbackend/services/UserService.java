@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.nsu.kanbanboard.kanbanbackend.entities.ConfirmationTokenEntity;
 import ru.nsu.kanbanboard.kanbanbackend.entities.UserEntity;
+import ru.nsu.kanbanboard.kanbanbackend.repositories.ConfirmationTokenRepository;
 import ru.nsu.kanbanboard.kanbanbackend.repositories.UserRepository;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -51,5 +53,11 @@ public class UserService implements UserDetailsService {
 
     public int enableUser(String email){
         return userRepository.enableUser(email);
+    }
+
+    public String findTokenByEmail(String email){
+        UserEntity user = userRepository.findByEmail(email).orElseThrow(() ->  new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+        ConfirmationTokenEntity confirmationToken = confirmationTokenRepository.findByUserId(user.getId()).orElseThrow(() -> new UsernameNotFoundException("Token not found"));
+        return confirmationToken.getToken();
     }
 }
