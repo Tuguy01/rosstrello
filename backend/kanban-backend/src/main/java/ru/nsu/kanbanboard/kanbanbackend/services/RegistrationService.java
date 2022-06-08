@@ -31,9 +31,6 @@ public class RegistrationService {
                 new UserEntity(request.getEmail(), request.getUsername(), request.getPassword(), UserRoleEntity.USER)
         );
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-
-
         return token;
     }
 

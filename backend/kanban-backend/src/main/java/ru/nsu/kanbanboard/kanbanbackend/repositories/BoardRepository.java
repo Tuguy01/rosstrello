@@ -5,9 +5,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nsu.kanbanboard.kanbanbackend.entities.BoardEntity;
 import ru.nsu.kanbanboard.kanbanbackend.entities.ColumnEntity;
+import ru.nsu.kanbanboard.kanbanbackend.entities.ConfirmationTokenEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -22,6 +25,17 @@ public class BoardRepository {
 
     public BoardEntity getById(int id) {
         return entityManager.find(BoardEntity.class, id);
+    }
+
+    public BoardEntity newBoardCreate(String name, BoardEntity board, ConfirmationTokenEntity confirmationToken){
+        board.setName(name);
+
+        Collection<ConfirmationTokenEntity> tokens = new ArrayList<>();
+        tokens.add(confirmationToken);
+        board.setTokens(tokens);
+
+        entityManager.persist(board);
+        return board;
     }
 
 
