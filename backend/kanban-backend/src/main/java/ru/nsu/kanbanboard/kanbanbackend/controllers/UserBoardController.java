@@ -30,13 +30,23 @@ public class UserBoardController {
     @Autowired
     ConfirmationTokenService tokenService;
 
-    @GetMapping("/api/v1/boards/board/{boardID}/{token}")
-    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID, @PathVariable String token) {
+    @GetMapping("/api/v1/boards/board/{boardID}")
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID) {
 
         var entity = boardService.getBoardById(boardID);
         if (entity == null) {
             return ResponseEntity.badRequest().build();
         }
+        String email;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserEntity){
+            email = ((UserEntity)principal).getEmail();
+        } else {
+            email = principal.toString();
+        }
+
+        String token = userService.findTokenByEmail(email);
         Collection<ConfirmationTokenEntity> tokens = entity.getTokens();
         Iterator<ConfirmationTokenEntity> iterator = tokens.stream().iterator();
 
@@ -57,7 +67,7 @@ public class UserBoardController {
         if (principal instanceof UserEntity){
             email = ((UserEntity)principal).getEmail();
         } else {
-            email = "principal.toString()";
+            email = principal.toString();
         }
 
         String token = userService.findTokenByEmail(email);
