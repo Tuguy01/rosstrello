@@ -37,6 +37,12 @@ public class UserEntity implements UserDetails {
     private UserRoleEntity userRole;
     private Boolean locked = false;
     private Boolean enabled = true;
+    @ManyToMany
+    @JoinTable(name = "user_works_with_board", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "board_id", referencedColumnName = "id"))
+    private Collection<BoardEntity> boards;
+    @ManyToMany
+    @JoinTable(name = "user_works_with_cards", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "card_id", referencedColumnName = "id"))
+    private Collection<CardEntity> cards;
 
     public UserEntity(String email, String name, String password, UserRoleEntity userRole){
         this.email = email;
