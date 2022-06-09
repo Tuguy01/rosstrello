@@ -51,5 +51,8 @@ public class BoardRepository {
         return board;
     }
 
-
+    public void attachTokenToBoard(BoardEntity board, ConfirmationTokenEntity token) {
+        board.getTokens().add(token);
+        entityManager.merge(board);
+    }
 }

@@ -32,5 +32,8 @@ public class BoardService {
         return boardRepository.getAllBoardsOfUserByToken(token);
     }
 
+    public void attachTokenToBoard(BoardEntity board, ConfirmationTokenEntity token) {
+        boardRepository.attachTokenToBoard(board, token);
+    }
 
 }

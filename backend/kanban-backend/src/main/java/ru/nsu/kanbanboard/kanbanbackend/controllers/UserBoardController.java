@@ -74,9 +74,15 @@ public class UserBoardController {
     }
 
     @PutMapping(path = "attach_user")
-    public ResponseEntity<?> attachUserToBoard(@RequestParam String token, @RequestParam Integer boardID, @RequestParam Integer userID) {
+    public ResponseEntity<?> attachUserToBoard(@RequestParam String token, @RequestParam Integer boardID, @RequestParam String email) {
+        var board = boardService.getBoardById(boardID);
+        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, board);
+        if (!isAuthOk) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-
-        return null;
+        var tokenToAttach = tokenService.findByToken(userService.findTokenByEmail(email));
+        boardService.attachTokenToBoard(board, tokenToAttach);
+        return ResponseEntity.ok(null);
     }
 }
