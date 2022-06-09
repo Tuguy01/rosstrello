@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping
 public class UserBoardController {
@@ -50,8 +51,11 @@ public class UserBoardController {
         Collection<ConfirmationTokenEntity> tokens = entity.getTokens();
         Iterator<ConfirmationTokenEntity> iterator = tokens.stream().iterator();
 
+	System.out.println("Current token: " + token);
         while (iterator.hasNext()){
-            if (Objects.equals(iterator.next().getToken(), token)){
+	    String t = iterator.next().getToken();
+	    System.out.println(t);
+            if (Objects.equals(t, token)){
                 return ResponseEntity.ok(entity);
             }
         }
