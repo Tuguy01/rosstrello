@@ -150,6 +150,7 @@ function App() {
                       </div>
                       <button href="#contained-buttons"
 
+
                           style={{
                               padding: 16,
                               margin: '0 0 8px 0',
@@ -171,7 +172,18 @@ function App() {
             <h2> Add</h2>
             <div style={{margin: 8}}>
         <button
-
+            onClick={ r => {
+                console.log("rrrr");
+                fetch("http://localhost:8081/api/v1/columns?boardID=1", {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "name": "New"
+                    })
+                })
+            }}
                 style={{
                     padding: 4,
                     margin: '0 0 8px 0',

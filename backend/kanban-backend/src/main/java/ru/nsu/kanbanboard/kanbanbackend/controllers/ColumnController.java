@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.kanbanboard.kanbanbackend.entities.ColumnEntity;
 import ru.nsu.kanbanboard.kanbanbackend.services.ColumnService;
+@CrossOrigin(origins = "http://localhost:3000")
 
 @RestController
 @RequestMapping("/api/v1/columns")

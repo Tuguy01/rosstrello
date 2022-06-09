@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path = "/api/v1/boards/")
 public class UserBoardController {
