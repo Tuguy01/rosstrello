@@ -48,13 +48,13 @@ public class UserBoardController {
     }
 
     @PostMapping(path = "/api/v1/boards/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestBody BoardEntity board){
+    public ResponseEntity<BoardEntity> createBoard(@RequestBody BoardEntity board){
 
         String token = FindTokenService.findToken(userService);
 
         ConfirmationTokenEntity confirmationToken = tokenService.findByToken(token);
 
-        var newBoard = boardService.createNewBoard(name, board, confirmationToken);
+        var newBoard = boardService.createNewBoard(board.getName(), board, confirmationToken);
 
         if (newBoard != null){
             return ResponseEntity.ok(newBoard);
@@ -63,8 +63,8 @@ public class UserBoardController {
     }
 
     @DeleteMapping(path = "/api/v1/boards/")
-    public ResponseEntity<BoardEntity> deleteBoard(@RequestParam int boardID){
-        var deletedBoard = boardService.deleteBoard(boardID);
+    public ResponseEntity<BoardEntity> deleteBoard(@RequestBody BoardEntity board){
+        var deletedBoard = boardService.deleteBoard(board.getId());
         if (deletedBoard != null){
             return ResponseEntity.ok(deletedBoard);
         }
