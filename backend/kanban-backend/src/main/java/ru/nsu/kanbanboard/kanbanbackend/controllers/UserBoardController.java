@@ -1,6 +1,7 @@
 package ru.nsu.kanbanboard.kanbanbackend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 @RestController
-@RequestMapping
+@RequestMapping(path = "/api/v1/boards/")
 public class UserBoardController {
 
 
@@ -26,34 +27,27 @@ public class UserBoardController {
     @Autowired
     ConfirmationTokenService tokenService;
 
-    @GetMapping("/api/v1/boards/board/{boardID}")
-    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID) {
+    @GetMapping("board/{boardID}")
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID,  @RequestParam String token) {
 
         var entity = boardService.getBoardById(boardID);
         if (entity == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        String token = FindTokenService.findToken(userService);
-        Collection<ConfirmationTokenEntity> tokens = entity.getTokens();
-        Iterator<ConfirmationTokenEntity> iterator = tokens.stream().iterator();
-
-        while (iterator.hasNext()){
-            if (Objects.equals(iterator.next().getToken(), token)){
-                return ResponseEntity.ok(entity);
-            }
+        //String token = FindTokenService.findToken(userService);
+        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, entity);
+        if (!isAuthOk) {
+            return ResponseEntity.status(402).build();
         }
-
-         return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(entity);
     }
 
-    @PostMapping(path = "/api/v1/boards/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestBody BoardEntity board){
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestParam String token,@RequestBody BoardEntity board){
 
-        String token = FindTokenService.findToken(userService);
 
         ConfirmationTokenEntity confirmationToken = tokenService.findByToken(token);
-
         var newBoard = boardService.createNewBoard(name, board, confirmationToken);
 
         if (newBoard != null){
@@ -62,14 +56,27 @@ public class UserBoardController {
         return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping(path = "/api/v1/boards/")
-    public ResponseEntity<BoardEntity> deleteBoard(@RequestParam int boardID){
-        var deletedBoard = boardService.deleteBoard(boardID);
-        if (deletedBoard != null){
-            return ResponseEntity.ok(deletedBoard);
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@RequestParam String token, @RequestParam Integer boardID) {
+        var boards = boardService.getAllBoardsByUserToken(token);
+        boolean isSuchBoardFound = false;
+        for (BoardEntity board : boards) {
+            if (board.getId() == boardID) {
+                isSuchBoardFound = true;
+                boardService.deleteBoard(boardID);
+            }
         }
-        return ResponseEntity.notFound().build();
+        if (isSuchBoardFound) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
+    @PutMapping(path = "attach_user")
+    public ResponseEntity<?> attachUserToBoard(@RequestParam String token, @RequestParam Integer boardID, @RequestParam Integer userID) {
 
+
+        return null;
+    }
 }

@@ -60,4 +60,6 @@ public class UserService implements UserDetailsService {
         ConfirmationTokenEntity confirmationToken = confirmationTokenRepository.findByUserId(user.getId()).orElseThrow(() -> new UsernameNotFoundException("Token not found"));
         return confirmationToken.getToken();
     }
+
+
 }

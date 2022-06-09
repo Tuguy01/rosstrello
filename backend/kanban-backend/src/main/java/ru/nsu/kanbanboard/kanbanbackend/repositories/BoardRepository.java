@@ -23,6 +23,11 @@ public class BoardRepository {
         return entityManager.createQuery("from BoardEntity b order by b.id desc", BoardEntity.class).getResultList();
     }
 
+    public List<BoardEntity> getAllBoardsOfUserByToken(String token) {
+       return entityManager.createQuery("Select b.id, b.name from BoardEntity b where b.tokens = :tokenvalue", BoardEntity.class).setParameter("tokenvalue", token).getResultList();
+
+    }
+
     public BoardEntity getById(int id) {
         return entityManager.find(BoardEntity.class, id);
     }
