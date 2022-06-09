@@ -88,6 +88,50 @@ function App() {
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 100, background: 'lightgray'}}>
               <h1>Name board</h1>
           </div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+              <div style={{margin: 0}}>
+                  <button
+
+                      style={{
+                          position: "absolute",
+                          top: 20,
+                          left: 1200,
+                          padding: 4,
+                          margin: '0 0 8px 0',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          width: 100,
+                          minHeight: 50,
+                          borderRadius: 30,
+                          fontSize: "medium"
+                      }}
+                  >
+                      Sign in
+                  </button>
+              </div>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+              <div style={{margin: 0}}>
+                  <button
+
+                      style={{
+                          position: "absolute",
+                          top: 20,
+                          left: 1320,
+                          padding: 4,
+                          margin: '0 0 8px 0',
+                          backgroundColor: 'black',
+                          color: 'white',
+                          width: 100,
+                          minHeight: 50,
+                          borderRadius: 30,
+                          fontSize: "medium"
+                      }}
+                  >
+                      Sign up
+                  </button>
+              </div>
+          </div>
     <div style={{display: 'flex', justifyContent: 'center', height: '100%'}}>
       <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
 
@@ -103,10 +147,11 @@ function App() {
                                   {...provided.droppableProps}
                                   ref={provided.innerRef}
                                   style={{
-                                      background: snapshot.isDraggingOver ? 'lightblue' : 'lightgray',
+                                      background: snapshot.isDraggingOver ? 'dimgray' : 'lightgray',
                                       padding:4,
                                       width: 250,
-                                      minHeight: 500
+                                      minHeight: 500,
+                                      borderRadius: 10
                                   }}
                               >
                                   {column.items.map((item, index) => {
@@ -127,10 +172,11 @@ function App() {
                                                               padding: 16,
                                                               margin: '0 0 8px 0',
                                                               minHeight: '50px',
+                                                              borderRadius: 10,
                                                               backgroundColor: snapshot.isDragging
-                                                                  ? '#263B4A'
-                                                                  : '#456C86',
-                                                              color: 'white',
+                                                                  ? '#3b3c3d'
+                                                                  : '#f1f3f5',//task
+                                                              color: 'black',
                                                               ...provided.draggableProps.style
                                                           }}
                                                       >
@@ -154,12 +200,15 @@ function App() {
                               padding: 16,
                               margin: '0 0 8px 0',
                               minHeight: '50px',
-                              backgroundColor: 'lightgray',
+                              backgroundColor: 'black',
                               color: 'white',
-                              width: 250
+                              width: 250,
+                              borderRadius: 30,
+                              fontSize: "medium",
+                              fontFamily: 'Helvetica'
                           }}
                       >
-                        Add
+                        ADD
                       </button>
                   </div>
 
@@ -175,13 +224,15 @@ function App() {
                 style={{
                     padding: 4,
                     margin: '0 0 8px 0',
-                    backgroundColor: 'lightgray',
+                    backgroundColor: 'black',
                     color: 'white',
                     width: 50,
-                    minHeight: 500
+                    minHeight: 500,
+                    borderRadius: 30,
+                    fontSize: "xx-large"
                 }}
         >
-            Add
+            +
         </button>
             </div>
         </div>
