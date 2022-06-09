@@ -1,7 +1,6 @@
 package ru.nsu.kanbanboard.kanbanbackend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(path = "/api/v1/boards/")
+@RequestMapping
 public class UserBoardController {
 
 
@@ -27,28 +26,35 @@ public class UserBoardController {
     @Autowired
     ConfirmationTokenService tokenService;
 
-    @GetMapping("board/{boardID}")
-    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID,  @RequestParam String token) {
+    @GetMapping("/api/v1/boards/board/{boardID}")
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID) {
 
         var entity = boardService.getBoardById(boardID);
         if (entity == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        //String token = FindTokenService.findToken(userService);
-        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, entity);
-        if (!isAuthOk) {
-            return ResponseEntity.status(402).build();
+        String token = FindTokenService.findToken(userService);
+        Collection<ConfirmationTokenEntity> tokens = entity.getTokens();
+        Iterator<ConfirmationTokenEntity> iterator = tokens.stream().iterator();
+
+        while (iterator.hasNext()){
+            if (Objects.equals(iterator.next().getToken(), token)){
+                return ResponseEntity.ok(entity);
+            }
         }
-        return ResponseEntity.ok(entity);
+
+        return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestParam String token,@RequestBody BoardEntity board){
+    @PostMapping(path = "/api/v1/boards/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardEntity> createBoard(@RequestBody BoardEntity board){
 
+        String token = FindTokenService.findToken(userService);
 
         ConfirmationTokenEntity confirmationToken = tokenService.findByToken(token);
-        var newBoard = boardService.createNewBoard(name, board, confirmationToken);
+
+        var newBoard = boardService.createNewBoard(board.getName(), board, confirmationToken);
 
         if (newBoard != null){
             return ResponseEntity.ok(newBoard);
@@ -56,33 +62,14 @@ public class UserBoardController {
         return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteBoard(@RequestParam String token, @RequestParam Integer boardID) {
-        var boards = boardService.getAllBoardsByUserToken(token);
-        boolean isSuchBoardFound = false;
-        for (BoardEntity board : boards) {
-            if (board.getId() == boardID) {
-                isSuchBoardFound = true;
-                boardService.deleteBoard(boardID);
-            }
+    @DeleteMapping(path = "/api/v1/boards/")
+    public ResponseEntity<BoardEntity> deleteBoard(@RequestBody BoardEntity board){
+        var deletedBoard = boardService.deleteBoard(board.getId());
+        if (deletedBoard != null){
+            return ResponseEntity.ok(deletedBoard);
         }
-        if (isSuchBoardFound) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(path = "attach_user")
-    public ResponseEntity<?> attachUserToBoard(@RequestParam String token, @RequestParam Integer boardID, @RequestParam String email) {
-        var board = boardService.getBoardById(boardID);
-        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, board);
-        if (!isAuthOk) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
-        var tokenToAttach = tokenService.findByToken(userService.findTokenByEmail(email));
-        boardService.attachTokenToBoard(board, tokenToAttach);
-        return ResponseEntity.ok(null);
-    }
 }
