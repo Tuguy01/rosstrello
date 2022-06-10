@@ -23,6 +23,11 @@ public class BoardRepository {
         return entityManager.createQuery("from BoardEntity b order by b.id desc", BoardEntity.class).getResultList();
     }
 
+    public List<BoardEntity> getAllBoardsOfUserByToken(String token) {
+       return entityManager.createQuery("Select b.id, b.name from BoardEntity b where b.tokens = :tokenvalue", BoardEntity.class).setParameter("tokenvalue", token).getResultList();
+
+    }
+
     public BoardEntity getById(int id) {
         return entityManager.find(BoardEntity.class, id);
     }
@@ -38,5 +43,16 @@ public class BoardRepository {
         return board;
     }
 
+    public BoardEntity deleteBoard(int boardID){
+        var board = entityManager.find(BoardEntity.class, boardID);
+        if (board != null){
+            entityManager.remove(board);
+        }
+        return board;
+    }
 
+    public void attachTokenToBoard(BoardEntity board, ConfirmationTokenEntity token) {
+        board.getTokens().add(token);
+        entityManager.merge(board);
+    }
 }

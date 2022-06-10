@@ -15,6 +15,7 @@ public class CardsController {
     @Autowired
     CardsService cardsService;
 
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CardEntity> createColumn(@RequestParam int columnID, @RequestBody CardEntity card) {
         var newCard = cardsService.createNewCard(columnID, card);

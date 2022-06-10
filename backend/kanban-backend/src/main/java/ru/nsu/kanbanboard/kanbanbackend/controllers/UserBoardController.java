@@ -3,13 +3,10 @@ package ru.nsu.kanbanboard.kanbanbackend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.kanbanboard.kanbanbackend.entities.*;
-import ru.nsu.kanbanboard.kanbanbackend.repositories.ConfirmationTokenRepository;
+import ru.nsu.kanbanboard.kanbanbackend.security.FindTokenService;
 import ru.nsu.kanbanboard.kanbanbackend.services.BoardService;
 import ru.nsu.kanbanboard.kanbanbackend.services.ConfirmationTokenService;
 import ru.nsu.kanbanboard.kanbanbackend.services.UserService;
@@ -20,7 +17,7 @@ import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping
+@RequestMapping(path = "/api/v1/boards/")
 public class UserBoardController {
 
 
@@ -31,61 +28,62 @@ public class UserBoardController {
     @Autowired
     ConfirmationTokenService tokenService;
 
-    @GetMapping("/api/v1/boards/board/{boardID}")
-    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID) {
+    @GetMapping("board/{boardID}")
+    public ResponseEntity<BoardEntity> getBoardById(@PathVariable int boardID,  @RequestParam String token) {
 
         var entity = boardService.getBoardById(boardID);
         if (entity == null) {
             return ResponseEntity.badRequest().build();
         }
-        String email;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (principal instanceof UserEntity){
-            email = ((UserEntity)principal).getEmail();
-        } else {
-            email = principal.toString();
+        //String token = FindTokenService.findToken(userService);
+        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, entity);
+        if (!isAuthOk) {
+            return ResponseEntity.status(402).build();
         }
-
-        String token = userService.findTokenByEmail(email);
-        Collection<ConfirmationTokenEntity> tokens = entity.getTokens();
-        Iterator<ConfirmationTokenEntity> iterator = tokens.stream().iterator();
-
-	System.out.println("Current token: " + token);
-        while (iterator.hasNext()){
-	    String t = iterator.next().getToken();
-	    System.out.println(t);
-            if (Objects.equals(t, token)){
-                return ResponseEntity.ok(entity);
-            }
-        }
-
-         return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(entity);
     }
 
-    @PostMapping(path = "/api/v1/boards/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestBody BoardEntity board){
-        String email;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BoardEntity> createBoard(@RequestParam String name, @RequestParam String token,@RequestBody BoardEntity board){
 
-        if (principal instanceof UserEntity){
-            email = ((UserEntity)principal).getEmail();
-        } else {
-            email = principal.toString();
-        }
-
-        String token = userService.findTokenByEmail(email);
 
         ConfirmationTokenEntity confirmationToken = tokenService.findByToken(token);
-
         var newBoard = boardService.createNewBoard(name, board, confirmationToken);
 
         if (newBoard != null){
-            System.out.println("null");
             return ResponseEntity.ok(newBoard);
         }
         return ResponseEntity.badRequest().build();
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@RequestParam String token, @RequestParam Integer boardID) {
+        var boards = boardService.getAllBoardsByUserToken(token);
+        boolean isSuchBoardFound = false;
+        for (BoardEntity board : boards) {
+            if (board.getId() == boardID) {
+                isSuchBoardFound = true;
+                boardService.deleteBoard(boardID);
+            }
+        }
+        if (isSuchBoardFound) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
 
+    @PutMapping(path = "attach_user")
+    public ResponseEntity<?> attachUserToBoard(@RequestParam String token, @RequestParam Integer boardID, @RequestParam String email) {
+        var board = boardService.getBoardById(boardID);
+        boolean isAuthOk = FindTokenService.checkTokenBelongsBoard(token, board);
+        if (!isAuthOk) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        var tokenToAttach = tokenService.findByToken(userService.findTokenByEmail(email));
+        boardService.attachTokenToBoard(board, tokenToAttach);
+        return ResponseEntity.ok(null);
+    }
 }

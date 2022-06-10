@@ -16,6 +16,7 @@ public class ColumnController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ColumnEntity>  createColumn(@RequestParam int boardID, @RequestBody ColumnEntity column) {
+
         var newColumn = columnService.createNewColumn(boardID, column);
         if (newColumn != null) {
             return ResponseEntity.ok(newColumn);
