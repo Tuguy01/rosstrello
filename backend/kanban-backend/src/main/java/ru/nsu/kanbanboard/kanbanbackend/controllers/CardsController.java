@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.nsu.kanbanboard.kanbanbackend.entities.CardEntity;
 import ru.nsu.kanbanboard.kanbanbackend.entities.ColumnEntity;
 import ru.nsu.kanbanboard.kanbanbackend.services.CardsService;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/cards")
 public class CardsController {
