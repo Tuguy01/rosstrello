@@ -149,7 +149,19 @@ function App() {
                   </Droppable>
                       </div>
                       <button href="#contained-buttons"
-
+                              onClick={ r => {
+                                  console.log("rrrr");
+                                  fetch("http://localhost:8081/api/v1/cards?columnID=" + id.toString(), {
+                                      method: 'POST',
+                                      headers: {
+                                          "Content-Type": "application/json"
+                                      },
+                                      body: JSON.stringify({
+                                          "name": "New",
+                                          "description" : "null"
+                                      })
+                                  })
+                              }}
 
                           style={{
                               padding: 16,
